@@ -36,10 +36,12 @@ Mot de passe commun : **`1234567890`**
 | Employé | `employe@touslocations.com` |
 | Client | `client@touslocations.com` |
 | Gérant boutique **Outillage Maroc** (catalogue Makita, 1268 produits) | `gerant@outillagemaroc.ma` |
+| Gérant boutique **Transpalette Maroc** (manutention, 14 produits) | `gerant@transpalette-maroc.com` |
 
-> La boutique de démonstration **Outillage Maroc** (catalogue Makita complet, avec
-> images et descriptions) est chargée automatiquement. Pour la (ré)importer
-> manuellement : `cd backend && php artisan demo:makita` (ou `--fresh`).
+> Les boutiques de démonstration **Outillage Maroc** (catalogue Makita) et
+> **Transpalette Maroc** (équipements de manutention) — avec images et descriptions —
+> sont chargées automatiquement. Pour les (ré)importer manuellement :
+> `cd backend && php artisan demo:makita` et `php artisan demo:transpalette` (option `--fresh`).
 
 ---
 
