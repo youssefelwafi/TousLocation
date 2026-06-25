@@ -10,6 +10,13 @@ import { formatMoney } from "../utils/format";
 
 const TAX = 20;
 
+// Date+heure locale au format input datetime-local (YYYY-MM-DDTHH:mm).
+function nowLocal() {
+  const d = new Date();
+  d.setMinutes(d.getMinutes() - d.getTimezoneOffset());
+  return d.toISOString().slice(0, 16);
+}
+
 export default function ClientStore() {
   const { t } = useTranslation();
   const { user } = useAuth();
@@ -17,6 +24,7 @@ export default function ClientStore() {
   const [loading, setLoading] = useState(true);
   const [sel, setSel] = useState(null); // product being requested
   const [form, setForm] = useState({ start: "", end: "", quantity: 1 });
+  const [minDt, setMinDt] = useState(""); // borne « pas dans le passé » (fixée à l'ouverture)
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState("");
 
@@ -25,16 +33,22 @@ export default function ClientStore() {
     api.get(`/boutiques/${user.proprietaire_id}`).then((r) => setProducts(r.data.products)).finally(() => setLoading(false));
   }, [user]);
 
+  // Facturation au jour : nombre de jours pleins (inclusif), indépendant de l'heure.
   const days = useMemo(() => {
     if (!form.start || !form.end) return 0;
-    const d = (new Date(form.end) - new Date(form.start)) / 86400000;
+    const s = new Date(form.start); s.setHours(0, 0, 0, 0);
+    const e = new Date(form.end); e.setHours(0, 0, 0, 0);
+    const d = (e - s) / 86400000;
     return d >= 0 ? d + 1 : 0;
   }, [form]);
   const total = sel ? Number(sel.prix_par_jour) * Number(form.quantity || 1) * days * (1 + TAX / 100) : 0;
 
   function openRequest(p) {
+    const now = nowLocal();
     setSel(p);
-    setForm({ start: "", end: "", quantity: 1 });
+    // Par défaut : démarre maintenant (même jour et heure), modifiable, sans passé.
+    setForm({ start: now, end: now, quantity: 1 });
+    setMinDt(now);
     setError("");
   }
 
@@ -82,11 +96,13 @@ export default function ClientStore() {
             <div className="form-row">
               <div>
                 <label>{t("store.start")}</label>
-                <input type="date" value={form.start} onChange={(e) => setForm({ ...form, start: e.target.value })} required />
+                <input type="datetime-local" value={form.start} min={minDt}
+                  onChange={(e) => setForm({ ...form, start: e.target.value })} required />
               </div>
               <div>
                 <label>{t("store.end")}</label>
-                <input type="date" value={form.end} min={form.start} onChange={(e) => setForm({ ...form, end: e.target.value })} required />
+                <input type="datetime-local" value={form.end} min={form.start || minDt}
+                  onChange={(e) => setForm({ ...form, end: e.target.value })} required />
               </div>
             </div>
             <label>{t("store.qty")}</label>

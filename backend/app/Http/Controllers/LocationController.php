@@ -45,9 +45,11 @@ class LocationController extends Controller
             'date_debut.after_or_equal' => 'La date de début ne peut pas être dans le passé.',
         ]);
 
-        $start = Carbon::parse($data['date_debut']);
-        $end = Carbon::parse($data['date_fin']);
-        $days = $start->diffInDays($end) + 1; // tarification au jour
+        // Tarification au jour calendaire : on ignore l'heure éventuelle (la colonne
+        // ne stocke que la date), pour que le total corresponde à l'estimation client.
+        $start = Carbon::parse($data['date_debut'])->startOfDay();
+        $end = Carbon::parse($data['date_fin'])->startOfDay();
+        $days = $start->diffInDays($end) + 1;
 
         // Le client : soit le client choisi par le staff, soit l'utilisateur lui-même.
         $clientId = ($request->user()->isStaff() && ! empty($data['client_id']))
