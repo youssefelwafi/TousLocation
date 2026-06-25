@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Concerns\TenantScoped;
 use App\Models\Materiel;
+use App\Models\PaiementVente;
 use App\Models\Vente;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -16,9 +17,51 @@ class VenteController extends Controller
     public function index(Request $request): JsonResponse
     {
         $this->requireModule($request, "ventes");
-        $query = Vente::with(['client', 'lignes.materiel'])->latest();
+        $query = Vente::with(['client', 'lignes.materiel', 'paiements.typePaiement'])->latest();
 
         return response()->json($this->scopeToTenant($query, $request)->paginate(15));
+    }
+
+    // --- Encaissements client (paiements partiels) ---
+    public function payments(Request $request, Vente $vente): JsonResponse
+    {
+        $this->requireModule($request, 'ventes');
+        $this->ensureOwned($request, $vente);
+
+        return response()->json($vente->paiements()->with('typePaiement')->latest('date_paiement')->get());
+    }
+
+    public function storePayment(Request $request, Vente $vente): JsonResponse
+    {
+        $this->requireModule($request, 'ventes');
+        $this->ensureOwned($request, $vente);
+
+        $data = $request->validate([
+            'montant' => ['required', 'numeric', 'min:0.01'],
+            'type_paiement_id' => ['required', 'exists:types_paiement,id'],
+            'date_paiement' => ['nullable', 'date'],
+            'note' => ['nullable', 'string', 'max:255'],
+        ]);
+        abort_if($data['montant'] > $vente->montant_restant + 0.001, 422, "Le montant dépasse le reste à encaisser ({$vente->montant_restant}).");
+
+        $paiement = $vente->paiements()->create([
+            'utilisateur_id' => $request->user()->id,
+            'type_paiement_id' => $data['type_paiement_id'],
+            'montant' => $data['montant'],
+            'date_paiement' => $data['date_paiement'] ?? now()->toDateString(),
+            'note' => $data['note'] ?? null,
+        ]);
+
+        return response()->json(['paiement' => $paiement->load('typePaiement'), 'vente' => $vente->fresh()], 201);
+    }
+
+    public function destroyPayment(Request $request, PaiementVente $paiement): JsonResponse
+    {
+        $this->requireModule($request, 'ventes');
+        $this->ensureOwned($request, $paiement->vente);
+        $paiement->delete();
+
+        return response()->json(['message' => 'Paiement supprimé']);
     }
 
     public function store(Request $request): JsonResponse
@@ -88,7 +131,7 @@ class VenteController extends Controller
         $this->requireModule($request, "ventes");
         $this->ensureOwned($request, $vente);
 
-        return response()->json($vente->load(['client', 'lignes.materiel']));
+        return response()->json($vente->load(['client', 'lignes.materiel', 'paiements.typePaiement']));
     }
 
     public function destroy(Request $request, Vente $vente): JsonResponse

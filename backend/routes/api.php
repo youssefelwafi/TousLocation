@@ -93,6 +93,11 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/ventes', [VenteController::class, 'store']);
     Route::get('/ventes/{vente}', [VenteController::class, 'show']);
     Route::delete('/ventes/{vente}', [VenteController::class, 'destroy']);
+    Route::get('/ventes/{vente}/recu', [FactureController::class, 'vente']);
+    // Encaissements (paiements partiels)
+    Route::get('/ventes/{vente}/paiements', [VenteController::class, 'payments']);
+    Route::post('/ventes/{vente}/paiements', [VenteController::class, 'storePayment']);
+    Route::delete('/paiements-vente/{paiement}', [VenteController::class, 'destroyPayment']);
 
     // Dépenses
     Route::get('/depenses', [DepenseController::class, 'index']);

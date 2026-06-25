@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Attributes\Fillable;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -11,6 +12,8 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 class Vente extends Model
 {
     protected $table = 'ventes';
+
+    protected $appends = ['montant_paye', 'montant_restant', 'statut_paiement'];
 
     protected function casts(): array
     {
@@ -31,5 +34,33 @@ class Vente extends Model
     public function lignes(): HasMany
     {
         return $this->hasMany(LigneVente::class);
+    }
+
+    public function paiements(): HasMany
+    {
+        return $this->hasMany(PaiementVente::class);
+    }
+
+    protected function montantPaye(): Attribute
+    {
+        return Attribute::get(fn () => (float) $this->paiements()->sum('montant'));
+    }
+
+    protected function montantRestant(): Attribute
+    {
+        return Attribute::get(fn () => max(0, (float) $this->montant_total - $this->montant_paye));
+    }
+
+    // unpaid | partial | paid (encaissement client)
+    protected function statutPaiement(): Attribute
+    {
+        return Attribute::get(function () {
+            $paid = $this->montant_paye;
+            if ($paid <= 0) {
+                return 'unpaid';
+            }
+
+            return $paid >= (float) $this->montant_total ? 'paid' : 'partial';
+        });
     }
 }

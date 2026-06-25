@@ -59,6 +59,11 @@ const resources = {
         date: "Date de vente", item: "Article", unit_price: "Prix de vente", add_item: "Ajouter un article",
         no_items: "Ajoutez au moins un article", none: "Aucune vente",
         ht: "Total HT", tva: "TVA", ttc: "Total TTC",
+        view: "Détails de la vente", details: "Détails", receipt: "Reçu PDF", quantity: "Qté",
+        pay_status: "Paiement", paid: "Encaissé", remaining: "Reste à encaisser",
+        payments: "Encaissements", add_payment: "Ajouter un encaissement", amount: "Montant",
+        payment_type: "Mode de paiement", paid_at: "Date", no_payments: "Aucun encaissement enregistré",
+        items_title: "Articles vendus", info: "Informations",
       },
       suppliers: {
         title: "Gestion des fournisseurs", new: "Nouveau fournisseur", edit: "Modifier le fournisseur",
@@ -352,6 +357,11 @@ const resources = {
         date: "تاريخ البيع", item: "العنصر", unit_price: "سعر البيع", add_item: "إضافة عنصر",
         no_items: "أضف عنصرًا واحدًا على الأقل", none: "لا توجد مبيعات",
         ht: "المجموع بدون ضريبة", tva: "الضريبة", ttc: "المجموع بالضريبة",
+        view: "تفاصيل البيع", details: "التفاصيل", receipt: "إيصال PDF", quantity: "الكمية",
+        pay_status: "الدفع", paid: "المحصّل", remaining: "المتبقي للتحصيل",
+        payments: "المحصّلات", add_payment: "إضافة تحصيل", amount: "المبلغ",
+        payment_type: "طريقة الدفع", paid_at: "التاريخ", no_payments: "لا توجد محصّلات مسجلة",
+        items_title: "العناصر المباعة", info: "معلومات",
       },
       suppliers: {
         title: "إدارة الموردين", new: "مورد جديد", edit: "تعديل المورد",

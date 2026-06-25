@@ -36,17 +36,23 @@ api.interceptors.response.use(
   }
 );
 
-// Télécharge la facture PDF d'une location (avec le token d'auth).
-export async function downloadInvoice(rentalId) {
-  const res = await api.get(`/locations/${rentalId}/facture`, { responseType: "blob" });
+// Télécharge un PDF (facture / reçu) avec le token d'auth.
+async function downloadPdf(endpoint, filename) {
+  const res = await api.get(endpoint, { responseType: "blob" });
   const url = URL.createObjectURL(res.data);
   const a = document.createElement("a");
   a.href = url;
-  a.download = `facture-${rentalId}.pdf`;
+  a.download = filename;
   document.body.appendChild(a);
   a.click();
   a.remove();
   URL.revokeObjectURL(url);
 }
+
+// Facture PDF d'une location.
+export const downloadInvoice = (rentalId) => downloadPdf(`/locations/${rentalId}/facture`, `facture-${rentalId}.pdf`);
+
+// Reçu PDF d'une vente.
+export const downloadSaleReceipt = (venteId) => downloadPdf(`/ventes/${venteId}/recu`, `recu-vente-${venteId}.pdf`);
 
 export default api;
