@@ -16,9 +16,9 @@ class DeviseController extends Controller
     public function index(Request $request): JsonResponse
     {
         $query = Devise::withCount('materiels')->orderByDesc('par_defaut')->orderBy('code');
-        $rows = $this->scopeToTenant($query, $request)->get();
+        $rows = $this->dedupeForSuperAdmin($request, $this->scopeToTenant($query, $request)->get(), 'code');
 
-        return response()->json($this->dedupeForSuperAdmin($request, $rows, 'code'));
+        return response()->json($this->capSingleDefaultForSuperAdmin($request, $rows));
     }
 
     public function store(Request $request): JsonResponse

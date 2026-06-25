@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\Utilisateur;
+use App\Support\TenantProvisioner;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rule;
 
@@ -45,7 +47,16 @@ class UtilisateurController extends Controller
         $data['password'] = Hash::make($data['password']);
         $data['statut'] ??= 'active';
 
-        return response()->json(Utilisateur::create($data), 201);
+        $manager = DB::transaction(function () use ($data) {
+            $manager = Utilisateur::create($data);
+            // Référentiels par défaut (devises, TVA, unités, types de paiement…)
+            // pour que la nouvelle boutique soit immédiatement utilisable.
+            TenantProvisioner::provision($manager->id);
+
+            return $manager;
+        });
+
+        return response()->json($manager, 201);
     }
 
     public function update(Request $request, Utilisateur $utilisateur): JsonResponse

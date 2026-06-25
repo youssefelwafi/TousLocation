@@ -17,15 +17,6 @@ export function AuthProvider({ children }) {
     return data.user;
   }
 
-  // Inscription d'un manager (nouvel espace) — connecte automatiquement.
-  async function register(payload) {
-    const { data } = await api.post("/inscription-gerant", payload);
-    localStorage.setItem("token", data.token);
-    localStorage.setItem("user", JSON.stringify(data.user));
-    setUser(data.user);
-    return data.user;
-  }
-
   // Inscription d'un client rattaché à une boutique.
   async function registerClient(payload) {
     const { data } = await api.post("/inscription-client", payload);
@@ -47,7 +38,7 @@ export function AuthProvider({ children }) {
   }
 
   return (
-    <AuthContext.Provider value={{ user, login, register, registerClient, logout }}>
+    <AuthContext.Provider value={{ user, login, registerClient, logout }}>
       {children}
     </AuthContext.Provider>
   );

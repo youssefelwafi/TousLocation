@@ -46,6 +46,24 @@ trait TenantScoped
         return $request->user()->isSuperAdmin() ? $rows->unique($key)->values() : $rows;
     }
 
+    // Vue super-admin (multi-tenant) : n'expose qu'UN SEUL « par défaut » dans la
+    // liste, même si plusieurs tenants ont chacun leur propre défaut.
+    protected function capSingleDefaultForSuperAdmin(Request $request, Collection $rows): Collection
+    {
+        if (! $request->user()->isSuperAdmin()) {
+            return $rows;
+        }
+        $seen = false;
+        foreach ($rows as $row) {
+            if ($row->par_defaut) {
+                $row->par_defaut = ! $seen;
+                $seen = true;
+            }
+        }
+
+        return $rows;
+    }
+
     // Vérifie qu'un modèle appartient bien au tenant courant (404 sinon).
     protected function ensureOwned(Request $request, Model $model, string $column = 'proprietaire_id'): void
     {

@@ -6,7 +6,6 @@ import { AuthProvider, useAuth, isStaff, isSuperAdmin, isClient, isManager, hasM
 import { applyDir } from "./i18n";
 import Landing from "./pages/Landing";
 import Login from "./pages/Login";
-import Register from "./pages/Register";
 import Shops from "./pages/Shops";
 import Shop from "./pages/Shop";
 import RegisterClient from "./pages/RegisterClient";
@@ -119,7 +118,6 @@ export default function App() {
           {/* Public */}
           <Route path="/" element={<Landing />} />
           <Route path="/connexion" element={<Login />} />
-          <Route path="/inscription" element={<Register />} />
           <Route path="/boutiques" element={<Shops />} />
           <Route path="/boutique/:id" element={<Shop />} />
           <Route path="/inscription-client" element={<RegisterClient />} />

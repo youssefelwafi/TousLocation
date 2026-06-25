@@ -3,44 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Models\Utilisateur;
-use App\Support\TenantProvisioner;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\ValidationException;
 
 class AuthController extends Controller
 {
-    // Inscription publique d'un MANAGER (nouvel espace de travail / tenant).
-    public function registerManager(Request $request): JsonResponse
-    {
-        $data = $request->validate([
-            'nom' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'email', 'unique:utilisateurs,email'],
-            'password' => ['required', 'string', 'min:8', 'confirmed'],
-        ]);
-
-        $user = DB::transaction(function () use ($data) {
-            $user = Utilisateur::create([
-                'nom' => $data['nom'],
-                'email' => $data['email'],
-                'password' => $data['password'],
-                'role' => 'manager',
-                'proprietaire_id' => null, // un manager est un tenant racine
-                'statut' => 'active',
-            ]);
-            // Référentiels par défaut pour que l'espace soit utilisable de suite.
-            TenantProvisioner::provision($user->id);
-
-            return $user;
-        });
-
-        $token = $user->createToken('api')->plainTextToken;
-
-        return response()->json(['token' => $token, 'user' => $user], 201);
-    }
-
     // Inscription publique d'un CLIENT rattaché à une boutique (manager).
     public function registerClient(Request $request): JsonResponse
     {
@@ -65,22 +34,6 @@ class AuthController extends Controller
             'statut' => 'active',
         ]);
 
-        $token = $user->createToken('api')->plainTextToken;
-
-        return response()->json(['token' => $token, 'user' => $user], 201);
-    }
-
-    public function register(Request $request): JsonResponse
-    {
-        $data = $request->validate([
-            'nom' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'email', 'unique:utilisateurs,email'],
-            'password' => ['required', 'string', 'min:6'],
-            'telephone' => ['nullable', 'string', 'max:30'],
-        ]);
-
-        $data['role'] = 'client';
-        $user = Utilisateur::create($data);
         $token = $user->createToken('api')->plainTextToken;
 
         return response()->json(['token' => $token, 'user' => $user], 201);

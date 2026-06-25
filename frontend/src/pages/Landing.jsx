@@ -43,7 +43,6 @@ export default function Landing() {
         <p>{t("landing.sub")}</p>
         <div className="land-cta">
           <Link to="/boutiques" className="btn-primary big">{t("nav2.shops")} <ArrowRight size={18} /></Link>
-          <Link to="/inscription" className="btn-ghost big">{t("landing.cta_create")}</Link>
           <Link to="/connexion" className="btn-ghost big">{t("landing.cta_login")}</Link>
         </div>
         <small className="land-loginq">{t("landing.login_q")} <Link to="/connexion">{t("landing.cta_login")}</Link></small>

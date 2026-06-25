@@ -39,7 +39,7 @@ export default function Login() {
         <button disabled={loading} type="submit">
           {loading ? t("login.signing") : t("login.signin")}
         </button>
-        <small className="hint">{t("login.no_account")} <Link to="/inscription">{t("login.create_account")}</Link></small>
+        <small className="hint">{t("login.no_account")} <Link to="/boutiques">{t("nav2.shops")}</Link></small>
         <small className="hint">{t("login.demo")}</small>
       </form>
     </div>

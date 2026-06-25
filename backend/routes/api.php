@@ -25,8 +25,8 @@ use App\Http\Controllers\VenteController;
 use Illuminate\Support\Facades\Route;
 
 // --- Public ---
-Route::post('/inscription', [AuthController::class, 'register']);
-Route::post('/inscription-gerant', [AuthController::class, 'registerManager']);
+// NB : les gérants (managers) sont créés UNIQUEMENT par le super-admin (cf. /utilisateurs).
+// Seuls les clients peuvent s'inscrire publiquement (rattachés à une boutique).
 Route::post('/inscription-client', [AuthController::class, 'registerClient']);
 Route::post('/connexion', [AuthController::class, 'login']);
 // Boutiques publiques

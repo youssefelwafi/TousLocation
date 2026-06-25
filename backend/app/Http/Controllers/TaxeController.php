@@ -15,9 +15,9 @@ class TaxeController extends Controller
     public function index(Request $request): JsonResponse
     {
         $query = Taxe::orderByDesc('par_defaut')->orderBy('taux');
-        $rows = $this->scopeToTenant($query, $request)->get();
+        $rows = $this->dedupeForSuperAdmin($request, $this->scopeToTenant($query, $request)->get(), 'nom');
 
-        return response()->json($this->dedupeForSuperAdmin($request, $rows, 'nom'));
+        return response()->json($this->capSingleDefaultForSuperAdmin($request, $rows));
     }
 
     public function store(Request $request): JsonResponse
