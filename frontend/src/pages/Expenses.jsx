@@ -91,7 +91,7 @@ export default function Expenses() {
                 <td><span className="badge badge-pending">{r.categorie}</span></td>
                 <td>{r.libelle}</td>
                 <td className="muted">{r.fournisseur?.nom || "-"}</td>
-                <td className="muted">{r.typePaiement?.nom || "-"}</td>
+                <td className="muted">{r.type_paiement?.nom || "-"}</td>
                 <td>{formatMoney(r.montant)}</td>
                 <td className="actions-col">
                   <button className="icon-btn" title={t("common.edit")} onClick={() => openEdit(r)}><Pencil size={16} /></button>

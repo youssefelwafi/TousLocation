@@ -266,7 +266,7 @@ export default function Purchases() {
               <div className="cart-line" key={pay.id}>
                 <div className="cl-info">
                   <strong>{formatMoney(pay.montant)}</strong>
-                  <span className="muted">{formatDate(pay.date_paiement)}{pay.typePaiement ? ` · ${pay.typePaiement.nom}` : ""}</span>
+                  <span className="muted">{formatDate(pay.date_paiement)}{pay.type_paiement ? ` · ${pay.type_paiement.nom}` : ""}</span>
                 </div>
                 <button type="button" className="icon-btn danger" onClick={() => removePayment(pay)}><Trash2 size={14} /></button>
               </div>

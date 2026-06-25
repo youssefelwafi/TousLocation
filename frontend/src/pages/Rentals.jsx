@@ -151,7 +151,7 @@ export default function Rentals() {
                 <tr key={p.id}>
                   <td>{formatDate(p.date_paiement)}</td>
                   <td>{formatMoney(p.montant)}</td>
-                  <td>{p.typePaiement?.nom || "-"}</td>
+                  <td>{p.type_paiement?.nom || "-"}</td>
                   <td className="muted">{p.note || "-"}</td>
                   <td className="actions-col">
                     <button className="icon-btn danger" onClick={() => removePayment(p)}><Trash2 size={14} /></button>
