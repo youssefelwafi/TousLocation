@@ -1,4 +1,4 @@
-import { Link, useNavigate } from "react-router-dom";
+import { Link, NavLink, useNavigate } from "react-router-dom";
 import { Store, FileText, LogOut, Languages } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { useAuth } from "../auth";
@@ -16,8 +16,8 @@ export default function ClientLayout({ children }) {
       <header className="client-header">
         <Link to="/magasin"><img src="/logo.png" alt="TousLocation" className="land-logo" /></Link>
         <nav className="client-nav">
-          <Link to="/magasin"><Store size={16} /> {t("nav2.store")}</Link>
-          <Link to="/mes-locations"><FileText size={16} /> {t("nav2.my_rentals")}</Link>
+          <NavLink to="/magasin"><Store size={16} /> {t("store.marketplace")}</NavLink>
+          <NavLink to="/mes-locations"><FileText size={16} /> {t("nav2.my_rentals")}</NavLink>
         </nav>
         <div className="client-right">
           <button className="land-lang" onClick={() => { i18n.changeLanguage(to); localStorage.setItem("lang", to); applyDir(to); }}>

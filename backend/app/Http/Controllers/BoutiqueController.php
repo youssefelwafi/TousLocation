@@ -24,6 +24,31 @@ class BoutiqueController extends Controller
         return response()->json($shops);
     }
 
+    // Catalogue global (toutes boutiques) — paginé, avec recherche et filtre boutique.
+    // Permet à un client connecté de parcourir et commander dans n'importe quelle boutique.
+    public function catalogue(Request $request): JsonResponse
+    {
+        $query = Materiel::query()
+            ->where('statut', 'available')
+            ->where('quantite', '>', 0)
+            ->whereHas('proprietaire', fn ($q) => $q->where('role', 'manager')->where('statut', 'active'))
+            ->with(['categorie', 'marque', 'unite', 'devise', 'proprietaire:id,nom']);
+
+        if ($search = trim((string) $request->query('search'))) {
+            $query->where(function ($q) use ($search) {
+                $q->where('nom', 'like', "%{$search}%")
+                  ->orWhere('description', 'like', "%{$search}%")
+                  ->orWhereHas('marque', fn ($m) => $m->where('nom', 'like', "%{$search}%"))
+                  ->orWhereHas('categorie', fn ($c) => $c->where('nom', 'like', "%{$search}%"));
+            });
+        }
+        if ($boutiqueId = $request->query('boutique')) {
+            $query->where('proprietaire_id', $boutiqueId);
+        }
+
+        return response()->json($query->latest()->paginate(24));
+    }
+
     // Détail d'une boutique + ses produits disponibles.
     public function show(Utilisateur $boutique): JsonResponse
     {

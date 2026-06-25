@@ -38,6 +38,9 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/deconnexion', [AuthController::class, 'logout']);
     Route::get('/profil', [AuthController::class, 'me']);
 
+    // Catalogue global (client connecté) : parcourt toutes les boutiques.
+    Route::get('/catalogue', [BoutiqueController::class, 'catalogue']);
+
     // Gérants (super-admin)
     Route::get('/utilisateurs', [UtilisateurController::class, 'index']);
     Route::post('/utilisateurs', [UtilisateurController::class, 'store']);

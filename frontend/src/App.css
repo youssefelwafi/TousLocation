@@ -195,6 +195,14 @@ h1, h2, h3, h4 { letter-spacing: -0.02em; font-weight: 600; }
 .sc-body { display: flex; flex-direction: column; gap: 2px; }
 .sc-body strong { font-size: 15px; }
 .sc-price { color: var(--accent); font-weight: 700; font-size: 15px; margin-top: 4px; }
+.sc-shop { display: inline-flex; align-items: center; gap: 4px; font-size: 11px; color: var(--text-2); font-weight: 600; text-transform: uppercase; letter-spacing: .3px; }
+
+/* Barre de filtres du catalogue client */
+.store-filters { display: flex; gap: 12px; margin-bottom: 20px; flex-wrap: wrap; }
+.store-filters .search-field { background: var(--surface); }
+.store-filters .search-field.grow { flex: 1; min-width: 220px; }
+.store-filters select { border: none; background: transparent; font: inherit; color: var(--text); outline: none; cursor: pointer; }
+@media (max-width: 520px) { .store-filters .search-field.grow { min-width: 100%; } }
 
 /* ---------- Client layout ---------- */
 .client-app { min-height: 100vh; background: var(--bg); }
@@ -203,6 +211,7 @@ h1, h2, h3, h4 { letter-spacing: -0.02em; font-weight: 600; }
 .client-nav { display: flex; gap: 6px; margin-right: auto; }
 .client-nav a { display: inline-flex; align-items: center; gap: 7px; color: var(--text-2); text-decoration: none; padding: 8px 14px; border-radius: 10px; font-weight: 500; font-size: 14px; }
 .client-nav a:hover { background: rgba(0,0,0,.05); color: var(--text); }
+.client-nav a.active { background: var(--accent); color: #fff; }
 .client-right { display: flex; align-items: center; gap: 10px; }
 .client-user { font-weight: 600; font-size: 14px; }
 .client-content { max-width: 1200px; margin: 0 auto; padding: 30px 6vw; }

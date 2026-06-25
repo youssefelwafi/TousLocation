@@ -51,18 +51,32 @@ class LocationController extends Controller
         $end = Carbon::parse($data['date_fin'])->startOfDay();
         $days = $start->diffInDays($end) + 1;
 
-        // Le client : soit le client choisi par le staff, soit l'utilisateur lui-même.
-        $clientId = ($request->user()->isStaff() && ! empty($data['client_id']))
-            ? $data['client_id']
-            : $request->user()->id;
+        // Les articles + la boutique cible.
+        $materiels = Materiel::whereIn('id', collect($data['items'])->pluck('materiel_id'))->get()->keyBy('id');
 
-        $taxRate = \App\Models\Taxe::defaultRateFor($this->ownerId($request)); // TVA par défaut du tenant
+        if ($request->user()->isStaff()) {
+            // Staff : location dans SA boutique uniquement.
+            $ownerId = $this->ownerId($request);
+            foreach ($materiels as $m) {
+                $this->ensureOwned($request, $m);
+            }
+            $clientId = ! empty($data['client_id']) ? $data['client_id'] : $request->user()->id;
+        } else {
+            // Client (place de marché) : commande rattachée à la boutique du produit.
+            $owners = $materiels->pluck('proprietaire_id')->unique();
+            abort_if($owners->count() !== 1, 422, 'Une commande ne peut concerner qu\'une seule boutique à la fois.');
+            $ownerId = (int) $owners->first();
+            $clientId = $request->user()->id;
+        }
 
-        $location = DB::transaction(function () use ($data, $days, $start, $end, $clientId, $request, $taxRate) {
+        $employeId = $request->user()->isStaff() ? $request->user()->id : null;
+        $taxRate = \App\Models\Taxe::defaultRateFor($ownerId); // TVA par défaut de la boutique cible
+
+        $location = DB::transaction(function () use ($data, $days, $start, $end, $clientId, $ownerId, $employeId, $materiels, $taxRate) {
             $location = Location::create([
-                'proprietaire_id' => $this->ownerId($request),
+                'proprietaire_id' => $ownerId,
                 'utilisateur_id' => $clientId,
-                'employe_id' => $request->user()->isStaff() ? $request->user()->id : null,
+                'employe_id' => $employeId,
                 'date_debut' => $data['date_debut'],
                 'date_fin' => $data['date_fin'],
                 'statut' => 'pending',
@@ -74,7 +88,7 @@ class LocationController extends Controller
 
             $subtotal = 0; // HT
             foreach ($data['items'] as $item) {
-                $materiel = Materiel::findOrFail($item['materiel_id']);
+                $materiel = $materiels[$item['materiel_id']] ?? Materiel::findOrFail($item['materiel_id']);
 
                 // Disponibilité sur la période (réservations concurrentes + battement).
                 $available = $this->availableQuantity($materiel, $start, $end);

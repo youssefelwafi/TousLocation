@@ -23,6 +23,12 @@ class Materiel extends Model
         ];
     }
 
+    // Boutique (gérant / tenant) propriétaire du matériel.
+    public function proprietaire(): BelongsTo
+    {
+        return $this->belongsTo(Utilisateur::class, 'proprietaire_id');
+    }
+
     public function categorie(): BelongsTo
     {
         return $this->belongsTo(Categorie::class);

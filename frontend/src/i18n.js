@@ -173,6 +173,9 @@ const resources = {
         sent: "Demande envoyée ! Le loueur la confirmera.", none: "Aucun produit disponible",
         login_to_rent: "Connectez-vous pour louer", create_to_rent: "Créer un compte pour louer",
         my_rentals: "Mes locations", browse: "Parcourir le catalogue",
+        search_ph: "Rechercher un produit, une marque…", all_shops: "Toutes les boutiques",
+        shop: "Boutique", results: "produits", load_more: "Voir plus", no_results: "Aucun résultat",
+        marketplace: "Catalogue", filters: "Filtres",
       },
       reg_client: {
         title: "Créer un compte client", subtitle: "pour louer chez {{shop}}",
@@ -471,6 +474,9 @@ const resources = {
         sent: "تم إرسال الطلب! سيؤكده المؤجر.", none: "لا توجد منتجات متاحة",
         login_to_rent: "سجّل الدخول للكراء", create_to_rent: "أنشئ حسابًا للكراء",
         my_rentals: "إيجاراتي", browse: "تصفح الكتالوج",
+        search_ph: "ابحث عن منتج أو علامة…", all_shops: "كل المتاجر",
+        shop: "المتجر", results: "منتجات", load_more: "عرض المزيد", no_results: "لا توجد نتائج",
+        marketplace: "الكتالوج", filters: "تصفية",
       },
       reg_client: {
         title: "إنشاء حساب عميل", subtitle: "للكراء لدى {{shop}}",
