@@ -140,6 +140,9 @@ export default function App() {
           <Route path="/parametres" element={staffPage(<Settings />)} />
           <Route path="/employes" element={<Protected need="manager"><Layout><Employees /></Layout></Protected>} />
           <Route path="/utilisateurs" element={<Protected need="super"><Layout><Users /></Layout></Protected>} />
+
+          {/* Toute URL inconnue renvoie à l'accueil (pas de cul-de-sac). */}
+          <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </BrowserRouter>
     </AuthProvider>

@@ -160,7 +160,7 @@ const resources = {
         have_account: "Déjà inscrit ?", login_link: "Se connecter",
         success: "Compte créé avec succès !",
       },
-      nav2: { employees: "Employés", store: "Boutique", my_rentals: "Mes locations", shops: "Boutiques" },
+      nav2: { employees: "Employés", store: "Boutique", my_rentals: "Mes locations", shops: "Boutiques", home: "Accueil" },
       shops: {
         title: "Nos boutiques", subtitle: "Choisissez une boutique pour louer du matériel",
         products: "produits", visit: "Voir la boutique", none: "Aucune boutique disponible",
@@ -461,7 +461,7 @@ const resources = {
         have_account: "مسجل بالفعل؟", login_link: "تسجيل الدخول",
         success: "تم إنشاء الحساب بنجاح!",
       },
-      nav2: { employees: "الموظفون", store: "المتجر", my_rentals: "إيجاراتي", shops: "المتاجر" },
+      nav2: { employees: "الموظفون", store: "المتجر", my_rentals: "إيجاراتي", shops: "المتاجر", home: "الرئيسية" },
       shops: {
         title: "متاجرنا", subtitle: "اختر متجرًا لكراء المعدات",
         products: "منتجات", visit: "زيارة المتجر", none: "لا توجد متاجر متاحة",

@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { useAuth, homeFor } from "../auth";
+import PublicTopbar from "../components/PublicTopbar";
 
 export default function Login() {
   const { login } = useAuth();
@@ -27,7 +28,9 @@ export default function Login() {
   }
 
   return (
-    <div className="login-wrap">
+    <div className="auth-shell">
+      <PublicTopbar cta="none" />
+      <div className="login-wrap">
       <form className="login-card" onSubmit={handleSubmit}>
         <Link to="/"><img src="/logo.png" alt="TousLocation" className="brand-logo" /></Link>
         <p className="subtitle">{t("login.subtitle")}</p>
@@ -42,6 +45,7 @@ export default function Login() {
         <small className="hint">{t("login.no_account")} <Link to="/boutiques">{t("nav2.shops")}</Link></small>
         <small className="hint">{t("login.demo")}</small>
       </form>
+      </div>
     </div>
   );
 }

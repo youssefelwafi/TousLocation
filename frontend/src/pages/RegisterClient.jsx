@@ -3,6 +3,7 @@ import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import api from "../api";
 import { useAuth } from "../auth";
+import PublicTopbar from "../components/PublicTopbar";
 
 export default function RegisterClient() {
   const { registerClient } = useAuth();
@@ -35,7 +36,9 @@ export default function RegisterClient() {
   }
 
   return (
-    <div className="login-wrap">
+    <div className="auth-shell">
+      <PublicTopbar />
+      <div className="login-wrap">
       <form className="login-card" onSubmit={submit}>
         <Link to={shopId ? `/boutique/${shopId}` : "/boutiques"}><img src="/logo.png" alt="TousLocation" className="brand-logo" /></Link>
         <p className="subtitle">{shopName ? t("reg_client.subtitle", { shop: shopName }) : t("reg_client.title")}</p>
@@ -59,6 +62,7 @@ export default function RegisterClient() {
         <button disabled={loading || !shopId} type="submit">{loading ? t("register.submitting") : t("reg_client.submit")}</button>
         <small className="hint">{t("reg_client.have")} <Link to="/connexion">{t("reg_client.login")}</Link></small>
       </form>
+      </div>
     </div>
   );
 }
