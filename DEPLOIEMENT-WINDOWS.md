@@ -35,6 +35,11 @@ Mot de passe commun : **`1234567890`**
 | Gérant (boutique) | `manager@touslocations.com` |
 | Employé | `employe@touslocations.com` |
 | Client | `client@touslocations.com` |
+| Gérant boutique **Outillage Maroc** (catalogue Makita, 1268 produits) | `gerant@outillagemaroc.ma` |
+
+> La boutique de démonstration **Outillage Maroc** (catalogue Makita complet, avec
+> images et descriptions) est chargée automatiquement. Pour la (ré)importer
+> manuellement : `cd backend && php artisan demo:makita` (ou `--fresh`).
 
 ---
 

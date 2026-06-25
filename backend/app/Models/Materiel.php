@@ -43,9 +43,18 @@ class Materiel extends Model
         return $this->belongsTo(Devise::class);
     }
 
-    // URL relative de l'image (préfixée côté frontend par l'origine de l'API).
+    // URL de l'image : URL absolue conservée telle quelle (catalogue importé),
+    // sinon chemin relatif /storage (préfixé côté frontend par l'origine de l'API).
     protected function urlImage(): Attribute
     {
-        return Attribute::get(fn () => $this->image ? '/storage/'.$this->image : null);
+        return Attribute::get(function () {
+            if (! $this->image) {
+                return null;
+            }
+
+            return str_starts_with($this->image, 'http://') || str_starts_with($this->image, 'https://')
+                ? $this->image
+                : '/storage/'.$this->image;
+        });
     }
 }

@@ -173,5 +173,6 @@ Write-Host "     - Admin   : admin@touslocations.com" -ForegroundColor Green
 Write-Host "     - Gerant  : manager@touslocations.com" -ForegroundColor Green
 Write-Host "     - Employe : employe@touslocations.com" -ForegroundColor Green
 Write-Host "     - Client  : client@touslocations.com" -ForegroundColor Green
+Write-Host "   Boutique Makita (1268 produits) : gerant@outillagemaroc.ma" -ForegroundColor Green
 Write-Host "   (Deux fenetres se sont ouvertes : API et Web. Les fermer arrete l'app.)" -ForegroundColor Green
 Write-Host "============================================================`n" -ForegroundColor Green

@@ -4,7 +4,12 @@ const API_URL = import.meta.env.VITE_API_URL || "http://127.0.0.1:8000/api";
 
 // Origine de l'API (sans /api) pour construire les URLs d'images.
 export const API_ORIGIN = API_URL.replace(/\/api\/?$/, "");
-export const assetUrl = (path) => (path ? `${API_ORIGIN}${path}` : null);
+// URL absolue (catalogue importé) renvoyée telle quelle ; sinon préfixée par l'origine de l'API.
+export const assetUrl = (path) => {
+  if (!path) return null;
+  if (/^https?:\/\//i.test(path)) return path;
+  return `${API_ORIGIN}${path}`;
+};
 
 const api = axios.create({
   baseURL: API_URL,

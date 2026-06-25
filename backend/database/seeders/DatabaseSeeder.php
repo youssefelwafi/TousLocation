@@ -53,6 +53,12 @@ class DatabaseSeeder extends Seeder
             'statut' => 'active',
         ]);
         $this->seedTenant($managerB->id, full: false);
+
+        // --- Tenant C : boutique « Outillage Maroc » (catalogue Makita importé) ---
+        // Importée depuis database/data/makita-products.json si le fichier existe.
+        if (is_file(database_path('data/makita-products.json'))) {
+            \Illuminate\Support\Facades\Artisan::call('demo:makita');
+        }
     }
 
     // Crée le catalogue + (option) une location de démo pour un tenant donné.
