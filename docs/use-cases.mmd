@@ -15,8 +15,9 @@ flowchart LR
     UC9(["Consulter les rapports"])
     UC10(["Gerer les parametres"])
     UC11(["Gerer les managers"])
-    UC12(["Consulter le catalogue"])
+    UC12(["Consulter le catalogue (place de marché)"])
     UC13(["Suivre ses locations"])
+    UC14(["Commander via le panier"])
 
     SA --- UC1
     MG --- UC1
@@ -39,8 +40,9 @@ flowchart LR
     EM --- UC4
     CL --- UC12
     CL --- UC13
+    CL --- UC14
 
     classDef actor fill:#1d1d1f,stroke:#1d1d1f,color:#fff;
     classDef uc fill:#e3f0ff,stroke:#0071e3,color:#0a2540;
     class SA,MG,EM,CL actor;
-    class UC1,UC2,UC3,UC4,UC5,UC6,UC7,UC8,UC9,UC10,UC11,UC12,UC13 uc;
+    class UC1,UC2,UC3,UC4,UC5,UC6,UC7,UC8,UC9,UC10,UC11,UC12,UC13,UC14 uc;

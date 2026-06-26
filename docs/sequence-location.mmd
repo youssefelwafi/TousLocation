@@ -1,0 +1,23 @@
+sequenceDiagram
+    autonumber
+    actor C as Client (panier)
+    participant V as React (api.js)
+    participant R as routes/api.php
+    participant S as Sanctum + TenantScoped
+    participant L as LocationController
+    participant E as Modèles Eloquent
+    participant DB as MySQL
+
+    C->>V: Confirmer la location (dates + articles)
+    V->>R: POST /locations (JSON + jeton Bearer)
+    R->>S: Vérification du jeton
+    S->>L: store(Request)
+    L->>L: Validation (dates non passées)
+    L->>E: Charge les Materiel des articles
+    L->>L: Même boutique ? + disponibilité (réservations + battement)
+    L->>E: Création Location + LigneLocation
+    E->>DB: INSERT (transaction)
+    DB-->>E: OK
+    E-->>L: Location (montants calculés)
+    L-->>V: 201 JSON
+    V-->>C: « Demande envoyée »

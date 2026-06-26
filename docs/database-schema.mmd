@@ -1,212 +1,232 @@
 erDiagram
-    USERS ||--o{ USERS : "owner_id (tenant)"
-    USERS ||--o{ CATEGORIES : "possede"
-    USERS ||--o{ BRANDS : "possede"
-    USERS ||--o{ UNITS : "possede"
-    USERS ||--o{ CURRENCIES : "possede"
-    USERS ||--o{ TAXES : "possede"
-    USERS ||--o{ PAYMENT_TYPES : "possede"
-    USERS ||--o{ SUPPLIERS : "possede"
-    USERS ||--o{ EQUIPMENTS : "possede"
+    UTILISATEURS ||--o{ UTILISATEURS : "proprietaire_id (boutique)"
+    UTILISATEURS ||--o{ CATEGORIES : "possède"
+    UTILISATEURS ||--o{ MARQUES : "possède"
+    UTILISATEURS ||--o{ UNITES : "possède"
+    UTILISATEURS ||--o{ DEVISES : "possède"
+    UTILISATEURS ||--o{ TAXES : "possède"
+    UTILISATEURS ||--o{ TYPES_PAIEMENT : "possède"
+    UTILISATEURS ||--o{ FOURNISSEURS : "possède"
+    UTILISATEURS ||--o{ MATERIELS : "possède"
 
-    CATEGORIES ||--o{ EQUIPMENTS : "classe"
-    BRANDS ||--o{ EQUIPMENTS : "marque"
-    UNITS ||--o{ EQUIPMENTS : "unite"
-    CURRENCIES ||--o{ EQUIPMENTS : "devise"
+    CATEGORIES ||--o{ MATERIELS : "classe"
+    MARQUES ||--o{ MATERIELS : "marque"
+    UNITES ||--o{ MATERIELS : "unité"
+    DEVISES ||--o{ MATERIELS : "devise"
 
-    USERS ||--o{ RENTALS : "client"
-    USERS ||--o{ RENTALS : "employe"
-    RENTALS ||--o{ RENTAL_ITEMS : "lignes"
-    EQUIPMENTS ||--o{ RENTAL_ITEMS : "materiel"
-    RENTALS ||--o| CONTRACTS : "contrat"
-    RENTALS ||--o{ PAYMENTS : "paiements"
-    PAYMENT_TYPES ||--o{ PAYMENTS : "mode"
+    UTILISATEURS ||--o{ LOCATIONS : "client"
+    UTILISATEURS ||--o{ LOCATIONS : "employé"
+    LOCATIONS ||--o{ LIGNES_LOCATION : "lignes"
+    MATERIELS ||--o{ LIGNES_LOCATION : "matériel"
+    LOCATIONS ||--o| CONTRATS : "contrat"
+    LOCATIONS ||--o{ PAIEMENTS : "paiements"
+    TYPES_PAIEMENT ||--o{ PAIEMENTS : "mode"
 
-    SUPPLIERS ||--o{ PURCHASES : "fournit"
-    PURCHASES ||--o{ PURCHASE_ITEMS : "lignes"
-    EQUIPMENTS ||--o{ PURCHASE_ITEMS : "materiel"
+    FOURNISSEURS ||--o{ ACHATS : "fournit"
+    ACHATS ||--o{ LIGNES_ACHAT : "lignes"
+    MATERIELS ||--o{ LIGNES_ACHAT : "matériel"
+    ACHATS ||--o{ PAIEMENTS_ACHAT : "règlements"
+    TYPES_PAIEMENT ||--o{ PAIEMENTS_ACHAT : "mode"
 
-    USERS ||--o{ SALES : "client"
-    SALES ||--o{ SALE_ITEMS : "lignes"
-    EQUIPMENTS ||--o{ SALE_ITEMS : "materiel"
+    UTILISATEURS ||--o{ VENTES : "client"
+    VENTES ||--o{ LIGNES_VENTE : "lignes"
+    MATERIELS ||--o{ LIGNES_VENTE : "matériel"
+    VENTES ||--o{ PAIEMENTS_VENTE : "encaissements"
+    TYPES_PAIEMENT ||--o{ PAIEMENTS_VENTE : "mode"
 
-    EQUIPMENTS ||--o{ STOCK_ADJUSTMENTS : "ajuste"
-    USERS ||--o{ STOCK_ADJUSTMENTS : "auteur"
+    MATERIELS ||--o{ AJUSTEMENTS_STOCK : "ajuste"
+    UTILISATEURS ||--o{ AJUSTEMENTS_STOCK : "auteur"
 
-    SUPPLIERS ||--o{ EXPENSES : "lie"
-    PAYMENT_TYPES ||--o{ EXPENSES : "mode"
-    USERS ||--o{ EXPENSES : "saisie"
+    FOURNISSEURS ||--o{ DEPENSES : "lié"
+    TYPES_PAIEMENT ||--o{ DEPENSES : "mode"
+    UTILISATEURS ||--o{ DEPENSES : "saisie"
 
-    USERS {
+    UTILISATEURS {
         bigint id PK
-        string name
+        string nom
         string email UK
         string password
         enum role "admin|manager|employee|client"
-        bigint owner_id FK "tenant (nullable)"
-        string phone
-        enum status "active|inactive"
+        bigint proprietaire_id FK "boutique (nullable)"
+        string telephone
+        enum statut "active|inactive"
+        json permissions
     }
     CATEGORIES {
         bigint id PK
-        bigint owner_id FK
-        string name
+        bigint proprietaire_id FK
+        string nom
         text description
     }
-    BRANDS {
+    MARQUES {
         bigint id PK
-        bigint owner_id FK
-        string name
-        text description
+        bigint proprietaire_id FK
+        string nom
     }
-    UNITS {
+    UNITES {
         bigint id PK
-        bigint owner_id FK
-        string name
-        string symbol
+        bigint proprietaire_id FK
+        string nom
+        string symbole
     }
-    CURRENCIES {
+    DEVISES {
         bigint id PK
-        bigint owner_id FK
-        string name
+        bigint proprietaire_id FK
+        string nom
         string code "ex: MAD"
-        string symbol "ex: DH"
-        decimal exchange_rate
-        bool is_default
+        string symbole "ex: DH"
+        decimal taux_change
+        bool par_defaut
     }
     TAXES {
         bigint id PK
-        bigint owner_id FK
-        string name
-        decimal rate "%"
-        bool is_default
+        bigint proprietaire_id FK
+        string nom
+        decimal taux "%"
+        bool par_defaut
     }
-    PAYMENT_TYPES {
+    TYPES_PAIEMENT {
         bigint id PK
-        bigint owner_id FK
-        string name
-        bool is_active
+        bigint proprietaire_id FK
+        string nom
+        bool actif
     }
-    SUPPLIERS {
+    FOURNISSEURS {
         bigint id PK
-        bigint owner_id FK
-        string name
-        string phone
+        bigint proprietaire_id FK
+        string nom
+        string telephone
         string email
-        string address
+        string adresse
     }
-    EQUIPMENTS {
+    MATERIELS {
         bigint id PK
-        bigint owner_id FK
-        bigint category_id FK
-        bigint brand_id FK
-        bigint unit_id FK
-        bigint currency_id FK
-        string name
-        decimal price_per_day
-        int quantity "capacite"
-        int buffer_days "battement"
-        string buffer_note
-        enum status "available|maintenance|inactive"
+        bigint proprietaire_id FK
+        bigint categorie_id FK
+        bigint marque_id FK
+        bigint unite_id FK
+        bigint devise_id FK
+        string nom
+        text description
+        decimal prix_par_jour
+        int quantite "capacité"
+        int jours_tampon "battement"
+        enum statut "available|maintenance|inactive"
         string image
     }
-    RENTALS {
+    LOCATIONS {
         bigint id PK
-        bigint owner_id FK
-        bigint user_id FK "client"
-        bigint employee_id FK
-        date start_date
-        date end_date
-        date return_date
-        enum status "pending|confirmed|ongoing|returned|cancelled"
-        decimal subtotal "HT"
-        decimal tax_rate
-        decimal tax_amount
-        decimal total_amount "TTC"
+        bigint proprietaire_id FK
+        bigint utilisateur_id FK "client"
+        bigint employe_id FK
+        date date_debut
+        date date_fin
+        date date_retour
+        enum statut "pending|confirmed|ongoing|returned|cancelled"
+        decimal sous_total "HT"
+        decimal taux_taxe
+        decimal montant_taxe
+        decimal montant_total "TTC"
     }
-    RENTAL_ITEMS {
+    LIGNES_LOCATION {
         bigint id PK
-        bigint rental_id FK
-        bigint equipment_id FK
-        int quantity
-        decimal unit_price
-        decimal subtotal
+        bigint location_id FK
+        bigint materiel_id FK
+        int quantite
+        decimal prix_unitaire
+        decimal sous_total
     }
-    CONTRACTS {
+    CONTRATS {
         bigint id PK
-        bigint rental_id FK
-        string contract_number UK
-        string pdf_path
-        timestamp generated_at
+        bigint location_id FK
+        string numero_contrat UK
+        string chemin_pdf
+        timestamp date_generation
     }
-    PAYMENTS {
+    PAIEMENTS {
         bigint id PK
-        bigint rental_id FK
-        bigint payment_type_id FK
-        bigint user_id FK
-        decimal amount
-        date paid_at
+        bigint location_id FK
+        bigint type_paiement_id FK
+        bigint utilisateur_id FK
+        decimal montant
+        date date_paiement
         string note
     }
-    PURCHASES {
+    ACHATS {
         bigint id PK
-        bigint owner_id FK
-        bigint supplier_id FK
-        bigint user_id FK
+        bigint proprietaire_id FK
+        bigint fournisseur_id FK
+        bigint utilisateur_id FK
         string reference
-        date purchase_date
-        enum status "pending|received"
-        decimal total_amount
+        date date_achat
+        enum statut "pending|received"
+        decimal montant_total
     }
-    PURCHASE_ITEMS {
+    LIGNES_ACHAT {
         bigint id PK
-        bigint purchase_id FK
-        bigint equipment_id FK
-        int quantity
-        decimal unit_cost
-        decimal subtotal
+        bigint achat_id FK
+        bigint materiel_id FK
+        int quantite
+        decimal cout_unitaire
+        decimal sous_total
     }
-    SALES {
+    PAIEMENTS_ACHAT {
         bigint id PK
-        bigint owner_id FK
+        bigint achat_id FK
+        bigint type_paiement_id FK
+        bigint utilisateur_id FK
+        decimal montant
+        date date_paiement
+    }
+    VENTES {
+        bigint id PK
+        bigint proprietaire_id FK
         bigint client_id FK
-        bigint user_id FK
+        bigint utilisateur_id FK
         string reference
-        date sale_date
-        decimal subtotal "HT"
-        decimal tax_rate
-        decimal tax_amount
-        decimal total_amount "TTC"
+        date date_vente
+        decimal sous_total "HT"
+        decimal taux_taxe
+        decimal montant_taxe
+        decimal montant_total "TTC"
     }
-    SALE_ITEMS {
+    LIGNES_VENTE {
         bigint id PK
-        bigint sale_id FK
-        bigint equipment_id FK
-        int quantity
-        decimal unit_price
-        decimal subtotal
+        bigint vente_id FK
+        bigint materiel_id FK
+        int quantite
+        decimal prix_unitaire
+        decimal sous_total
     }
-    STOCK_ADJUSTMENTS {
+    PAIEMENTS_VENTE {
         bigint id PK
-        bigint owner_id FK
-        bigint equipment_id FK
-        bigint user_id FK
+        bigint vente_id FK
+        bigint type_paiement_id FK
+        bigint utilisateur_id FK
+        decimal montant
+        date date_paiement
+    }
+    AJUSTEMENTS_STOCK {
+        bigint id PK
+        bigint proprietaire_id FK
+        bigint materiel_id FK
+        bigint utilisateur_id FK
         enum type "in|out"
-        int quantity
-        int quantity_before
-        int quantity_after
-        decimal unit_value "prix achat"
-        decimal total_value
-        string reason
+        int quantite
+        int quantite_avant
+        int quantite_apres
+        decimal valeur_unitaire
+        decimal valeur_totale
+        string motif
     }
-    EXPENSES {
+    DEPENSES {
         bigint id PK
-        bigint owner_id FK
-        bigint supplier_id FK
-        bigint payment_type_id FK
-        bigint user_id FK
-        string category
-        string label
-        decimal amount
-        date expense_date
+        bigint proprietaire_id FK
+        bigint fournisseur_id FK
+        bigint type_paiement_id FK
+        bigint utilisateur_id FK
+        string categorie
+        string libelle
+        decimal montant
+        date date_depense
     }

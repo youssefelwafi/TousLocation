@@ -1,0 +1,97 @@
+classDiagram
+    direction LR
+
+    class Utilisateur {
+      +int id
+      +string nom
+      +string email
+      +enum role
+      +int proprietaire_id
+      +string telephone
+      +enum statut
+      +json permissions
+      +tenantId() int
+      +hasModule(cle) bool
+    }
+    class Materiel {
+      +int id
+      +string nom
+      +string description
+      +decimal prix_par_jour
+      +int quantite
+      +int jours_tampon
+      +enum statut
+      +string image
+      +urlImage() string
+    }
+    class Categorie { +int id +string nom }
+    class Marque { +int id +string nom }
+    class Unite { +int id +string nom +string symbole }
+    class Devise { +int id +string code +string symbole +bool par_defaut }
+    class Taxe { +int id +string nom +decimal taux +bool par_defaut }
+    class TypePaiement { +int id +string nom +bool actif }
+    class Fournisseur { +int id +string nom +string telephone +string email }
+
+    class Location {
+      +int id
+      +date date_debut
+      +date date_fin
+      +enum statut
+      +decimal montant_total
+      +montantPaye() decimal
+      +montantRestant() decimal
+      +statutPaiement() string
+    }
+    class LigneLocation { +int quantite +decimal prix_unitaire +decimal sous_total }
+    class Paiement { +decimal montant +date date_paiement }
+    class Contrat { +string numero_contrat +string chemin_pdf }
+
+    class Achat {
+      +int id
+      +string reference
+      +date date_achat
+      +enum statut
+      +decimal montant_total
+      +statutPaiement() string
+    }
+    class LigneAchat { +int quantite +decimal cout_unitaire }
+    class PaiementAchat { +decimal montant +date date_paiement }
+
+    class Vente {
+      +int id
+      +date date_vente
+      +decimal montant_total
+      +statutPaiement() string
+    }
+    class LigneVente { +int quantite +decimal prix_unitaire }
+    class PaiementVente { +decimal montant +date date_paiement }
+
+    class Depense { +string categorie +string libelle +decimal montant +date date_depense }
+    class AjustementStock { +enum type +int quantite +string motif }
+
+    Utilisateur "1" --> "*" Materiel : possède
+    Utilisateur "1" --> "*" Location : client
+    Utilisateur "1" --> "*" Vente : client
+    Utilisateur "1" --> "*" Depense : crée
+
+    Categorie "1" --> "*" Materiel
+    Marque "1" --> "*" Materiel
+    Unite "1" --> "*" Materiel
+    Devise "1" --> "*" Materiel
+
+    Location "1" --> "*" LigneLocation
+    Materiel "1" --> "*" LigneLocation
+    Location "1" --> "*" Paiement
+    TypePaiement "1" --> "*" Paiement
+    Location "1" --> "0..1" Contrat
+
+    Fournisseur "1" --> "*" Achat
+    Achat "1" --> "*" LigneAchat
+    Materiel "1" --> "*" LigneAchat
+    Achat "1" --> "*" PaiementAchat
+
+    Vente "1" --> "*" LigneVente
+    Materiel "1" --> "*" LigneVente
+    Vente "1" --> "*" PaiementVente
+
+    Materiel "1" --> "*" AjustementStock

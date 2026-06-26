@@ -32,7 +32,7 @@ css: |
 
 <div class="cover">
 
-<p class="school">OFFICE DE LA FORMATION PROFESSIONNELLE ET DE LA PROMOTION DU TRAVAIL<br/>OFPPT – ISAG — CASABLANCA</p>
+<p class="school">OFFICE DE LA FORMATION PROFESSIONNELLE ET DE LA PROMOTION DU TRAVAIL<br/>INSTITUT SPÉCIALISÉ DE TECHNOLOGIE APPLIQUÉE<br/>ISTA – ISAG — CASABLANCA</p>
 
 <p class="sub">Filière : Développement Digital</p>
 
@@ -46,7 +46,7 @@ css: |
 <strong>Réalisé par&nbsp;:</strong> &nbsp;Youssef ELWAFI<br/>
 <strong>Encadré par&nbsp;:</strong> &nbsp;M. Othmane DAIF<br/>
 <strong>Filière&nbsp;:</strong> &nbsp;Développement Digital<br/>
-<strong>Établissement&nbsp;:</strong> &nbsp;OFPPT – ISAG, Casablanca
+<strong>Établissement&nbsp;:</strong> &nbsp;OFPPT – ISTA ISAG, Casablanca
 </p>
 
 <p class="yr">Année de formation : 2025 / 2026</p>
@@ -79,7 +79,7 @@ Je remercie tout particulièrement mon encadrant, **M. Othmane DAIF**, pour son
 encadrement, sa disponibilité et ses précieux conseils tout au long de ce travail.
 
 Mes remerciements s'adressent également à l'ensemble du **corps formateur et
-administratif de l'OFPPT – ISAG de Casablanca**, pour la qualité de la formation reçue.
+administratif de l'OFPPT – ISTA ISAG de Casablanca**, pour la qualité de la formation reçue.
 
 Enfin, je remercie ma **famille** et mes **amis** pour leur soutien moral indéfectible.
 
@@ -96,8 +96,10 @@ L'application repose sur une architecture découplée : une **API REST Laravel**
 interface **React** (Single Page Application) et une base de données **MySQL/MariaDB**.
 Elle couvre tout le cycle d'exploitation : catalogue et stock, locations (disponibilité,
 TVA, paiements partiels, facture PDF), achats, ventes, dépenses, ajustements de stock et
-**reporting financier**. Le système est **multi-entreprises (multi-tenant)**,
-**sécurisé**, **responsive** et **bilingue français/arabe**.
+**reporting financier**. Le système est **multi-boutiques (SaaS)** avec isolation des
+données par boutique : il expose une **place de marché client** (catalogue
+multi-boutiques avec recherche, filtre et panier multi-articles) et reste **sécurisé**,
+**responsive** et **bilingue français/arabe (RTL)**.
 
 **Mots-clés :** location de matériel, Laravel, React, API REST, base de données,
 multi-tenant, gestion de stock, développement web.
@@ -109,8 +111,10 @@ This end-of-studies project deals with the **design and development of TousLocat
 manual methods with a centralized, reliable and complete solution. Built on a **Laravel
 REST API**, a **React** SPA and a **MySQL/MariaDB** database, it covers the whole
 operational cycle: catalogue and stock, rentals (availability, VAT, partial payments, PDF
-invoice), purchasing, sales, expenses, stock adjustments and **financial reporting**. The
-system is **multi-tenant**, **secure**, **responsive** and **bilingual (French/Arabic)**.
+invoice), purchasing, sales, expenses, stock adjustments and **financial reporting**. It is
+a **multi-shop (SaaS) marketplace** where clients browse a multi-shop catalogue (search,
+filter and multi-item cart), while remaining **secure**, **responsive** and **bilingual
+(French/Arabic, RTL)**.
 
 **Keywords:** equipment rental, Laravel, React, REST API, database, multi-tenant, stock
 management, web development.
@@ -133,6 +137,7 @@ management, web development.
   - 2.3 Diagramme de cas d'utilisation
   - 2.4 Architecture de l'application (MVC)
   - 2.5 Conception de la base de données
+  - 2.6 Diagramme de classes (UML)
 - **Chapitre 3 — Réalisation**
   - 3.1 Environnement et outils de développement
   - 3.2 Technologies utilisées
@@ -151,7 +156,9 @@ management, web development.
 | Figure 1 | Diagramme de cas d'utilisation |
 | Figure 2 | Architecture technique (MVC) |
 | Figure 3 | Schéma de la base de données (modèle E-A) |
-| Figure 4 | Arborescence des vues de l'interface |
+| Figure 4 | Diagramme de classes (UML) |
+| Figure 5 | Arborescence des vues de l'interface |
+| Figure 6 | Diagramme de séquence — création d'une location |
 
 ### Liste des tableaux
 
@@ -308,12 +315,30 @@ d'authentification et d'isolation multi-tenant.
 
 ### 2.5 Conception de la base de données
 
-La base comprend **19 tables** (utilisateurs, matériel, locations, achats, ventes,
-dépenses, ajustements et référentiels). La quasi-totalité des tables porte une colonne
-`owner_id` garantissant l'isolation entre entreprises.
+La base de données adopte une **nomenclature 100 % française**. Les tables métier sont :
+`utilisateurs`, `materiels`, `locations`, `lignes_location`, `paiements`, `achats`,
+`lignes_achat`, `paiements_achat`, `ventes`, `lignes_vente`, `paiements_vente`,
+`depenses`, `ajustements_stock`, `contrats`, `fournisseurs`, ainsi que les référentiels
+`categories`, `marques`, `unites`, `devises`, `taxes` et `types_paiement`.
+
+Les **encaissements** sont modélisés par trois tables distinctes — `paiements`
+(locations), `paiements_achat` (achats) et `paiements_vente` (ventes) — ce qui permet le
+suivi des **règlements partiels** (montant payé, montant restant, statut de paiement).
+La quasi-totalité des tables porte une colonne `proprietaire_id` qui garantit
+l'**isolation des données** entre boutiques (multi-tenant).
 
 ![Figure 3 — Schéma de la base de données](images/database-schema.png)
 <p class="cap">Figure 3 — Schéma de la base de données (modèle entité-association)</p>
+
+### 2.6 Diagramme de classes (UML)
+
+Le diagramme de classes ci-dessous modélise les entités métier (modèles Eloquent)
+et leurs associations : un **Utilisateur** (boutique) possède ses **Matériels** ;
+une **Location** regroupe des **LigneLocation** et des **Paiement** ; les mêmes
+structures existent pour les **Achat** et les **Vente** (avec leurs règlements).
+
+![Diagramme de classes UML](images/uml-class.png)
+<p class="cap">Figure 4 — Diagramme de classes (modèles métier)</p>
 
 ### Conclusion du chapitre
 
@@ -354,12 +379,15 @@ Ce chapitre présente l'environnement et les technologies utilisés, puis détai
 
 ### 3.3 Structure des vues : étapes et fonctionnalités
 
-L'interface est organisée autour d'un **layout** commun (barre latérale de navigation,
-barre supérieure sur mobile, notifications). La figure ci-dessous présente
-l'arborescence des vues, suivie du détail de chaque écran (workflow + fonctionnalités).
+L'interface, à **nomenclature 100 % française**, se répartit en **trois espaces** :
+un **espace public** (accueil, connexion, vitrine des boutiques, inscription client),
+un **espace staff** (super-admin, gérant, employé) organisé autour d'un **layout** commun
+(barre latérale filtrée par permissions) et un **espace client** (place de marché et
+« Mes locations »). La figure ci-dessous présente l'arborescence des vues, suivie du
+détail des principaux écrans (workflow + fonctionnalités).
 
-![Figure 4 — Arborescence des vues](images/ui-structure.png)
-<p class="cap">Figure 4 — Arborescence des vues de l'interface</p>
+![Figure 5 — Arborescence des vues](images/ui-structure.png)
+<p class="cap">Figure 5 — Arborescence des vues de l'interface</p>
 
 <div class="view">
 <h4>Vue « Connexion »</h4>
@@ -410,21 +438,41 @@ disponibilité en temps réel).</li>
 la <strong>facture PDF</strong>.</li>
 </ol>
 <strong>Fonctionnalités :</strong> réservation multi-articles, contrôle de
-disponibilité, TVA, paiements partiels, facture PDF, changement de statut.
+disponibilité, TVA, encaissements partiels (table `paiements`), facture PDF, changement
+de statut.
+</div>
+
+<div class="view">
+<h4>Vue « Place de marché » (espace client)</h4>
+<strong>Workflow :</strong>
+<ol>
+<li>Le client parcourt un <strong>catalogue multi-boutiques</strong> (recherche par
+mot-clé, filtre par boutique).</li>
+<li>Il ajoute un ou plusieurs articles d'une <strong>même boutique</strong> à son
+<strong>panier</strong>.</li>
+<li>Il confirme la location sur une période commune ; la demande est rattachée à la
+boutique du produit et apparaît dans « Mes locations ».</li>
+</ol>
+<strong>Fonctionnalités :</strong> place de marché (catalogue multi-boutiques), recherche
+et filtre boutique, <strong>panier multi-articles</strong>, libre-inscription du client.
 </div>
 
 <div class="view">
 <h4>Vues « Achats / Ventes / Dépenses / Ajustements »</h4>
 <strong>Workflow :</strong>
 <ol>
-<li><strong>Achat</strong> : sélection du fournisseur et des articles → à la réception,
-le stock est <strong>alimenté</strong>.</li>
-<li><strong>Vente</strong> : sélection des articles → le stock est <strong>décrémenté</strong>.</li>
+<li><strong>Achat</strong> : sélection du fournisseur et des articles → à la
+<strong>réception</strong>, le stock est <strong>alimenté</strong> ; suivi des
+<strong>encaissements partiels</strong> (table `paiements_achat`).</li>
+<li><strong>Vente</strong> : sélection des articles → le stock est
+<strong>décrémenté</strong> ; encaissements partiels (table `paiements_vente`) et
+génération d'un <strong>reçu PDF</strong>.</li>
 <li><strong>Dépense</strong> : saisie d'une charge (catégorie, montant, date).</li>
 <li><strong>Ajustement</strong> : entrée/sortie de stock avec motif et valorisation.</li>
 </ol>
 <strong>Fonctionnalités :</strong> mouvements de stock cohérents et tracés, valorisation
-au prix d'achat, suppression sécurisée (réajustement du stock).
+au prix d'achat, encaissements partiels sur achats et ventes, reçu PDF de vente,
+suppression sécurisée (réajustement du stock).
 </div>
 
 <div class="view">
@@ -451,13 +499,27 @@ types de paiement).</li>
 « par défaut » uniques par espace.
 </div>
 
+Au-delà des écrans courants, l'application fonctionne en mode **multi-boutiques (SaaS)** :
+les **comptes gérants** ne sont créés que par le **super-admin**, tandis que les
+**clients** s'inscrivent librement (sans rattachement obligatoire à une boutique).
+Chaque nouvelle boutique est initialisée automatiquement (devises, TVA marocaines,
+unités, types de paiement, catégories) et l'application peut **importer des catalogues
+réels** (Makita, Transpalette) au moyen de **commandes Artisan** dédiées.
+
 ### 3.4 Sécurité et isolation multi-tenant
 
-L'application est **multi-tenant** : chaque manager dispose d'un espace **isolé**. Un
-trait `TenantScoped` filtre automatiquement les données par `owner_id` et bloque tout
-accès croisé (réponse 404). L'authentification se fait par **jeton (Sanctum)**, les mots
-de passe sont **hachés**, et chaque action est contrôlée selon le **rôle** de
-l'utilisateur. La **validation côté serveur** est systématique.
+L'application est **multi-tenant** : chaque boutique (gérant) dispose d'un espace
+**isolé**. Un trait `TenantScoped` filtre automatiquement les données par
+`proprietaire_id` et bloque tout accès croisé (réponse 404). L'authentification se fait
+par **jeton (Sanctum)**, les mots de passe sont **hachés**, et chaque action est
+contrôlée selon le **rôle** et, pour les employés, selon les **modules** autorisés. La
+**validation côté serveur** est systématique.
+
+Le diagramme de séquence suivant illustre la création d'une location depuis le
+panier client (place de marché) :
+
+![Diagramme de séquence — création d'une location](images/sequence-location.png)
+<p class="cap">Figure 6 — Séquence : création d'une location (panier client)</p>
 
 ### 3.5 Tests et déploiement
 
@@ -481,7 +543,7 @@ et la mise en ligne.
 | Difficulté | Solution apportée |
 | ---------- | ----------------- |
 | Calcul de la disponibilité réelle sur une période | Prise en compte des réservations concurrentes et d'un délai de battement, vérifiée côté serveur. |
-| Isolation des données entre entreprises | Colonne `owner_id` + filtrage automatique (trait `TenantScoped`). |
+| Isolation des données entre boutiques | Colonne `proprietaire_id` + filtrage automatique (trait `TenantScoped`). |
 | Cohérence du stock (achats/ventes/ajustements) | Centralisation des mouvements et transactions de base de données. |
 | Bilinguisme et sens RTL (arabe) | Bibliothèque d'internationalisation + adaptation CSS pour la direction droite-à-gauche. |
 | Gestion des images et PDF | Système de stockage de Laravel + lien public. |
@@ -499,7 +561,11 @@ Ce projet de fin d'études a permis de concevoir et de réaliser **TousLocation*
 application web complète et professionnelle de gestion de location de matériel. De
 l'analyse du besoin au déploiement, l'ensemble du cycle de développement a été couvert,
 en mobilisant des technologies modernes (Laravel, React, MySQL) et des bonnes pratiques
-(architecture MVC, API REST, sécurité, multi-tenant).
+(architecture MVC, API REST, sécurité, multi-tenant). **Tous les objectifs fixés ont été
+atteints** : la gestion complète du cycle de location, les **encaissements partiels** sur
+les locations, achats et ventes, les **documents PDF** (facture et reçu), la **place de
+marché client** multi-boutiques (catalogue, recherche, panier multi-articles), l'isolation
+des données par boutique (SaaS) et l'interface bilingue français/arabe.
 
 Sur le plan **personnel**, ce travail a renforcé mes compétences en développement
 full-stack, en conception de bases de données et en conduite de projet, tout en
@@ -531,8 +597,9 @@ répondant concrètement aux besoins des entreprises de location de matériel.
 
 - **Annexe A** — Schéma complet de la base de données (Figure 3 ; fichier interactif
   `database-schema.html`, exportable en PNG).
-- **Annexe B** — Diagramme de cas d'utilisation (Figure 1) et architecture MVC (Figure 2).
-- **Annexe C** — Arborescence des vues (Figure 4).
+- **Annexe B** — Diagramme de cas d'utilisation (Figure 1), architecture MVC (Figure 2) et
+  diagramme de classes UML (Figure 4).
+- **Annexe C** — Arborescence des vues (Figure 5) et diagramme de séquence (Figure 6).
 - **Annexe D** — Captures d'écran de l'application *(à insérer : connexion, tableau de
   bord/Kanban, catalogue, création de location, facture PDF, rapports)*.
 - **Annexe E** — Extraits de code *(à insérer : contrôleur, modèle Eloquent, composant
