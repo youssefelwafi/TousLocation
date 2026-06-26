@@ -1,40 +1,60 @@
 flowchart LR
-    subgraph CLIENT["Navigateur — React SPA (VIEW)"]
+    %% ===== VIEW (Frontend React) =====
+    subgraph VIEW["VIEW — Frontend React / Vite (FR · AR-RTL)"]
         direction TB
-        PAGES["Pages & Composants<br/>(Dashboard, Rentals, Settings...)"]
-        STATE["État & i18n<br/>(AuthContext, react-i18next)"]
-        AXIOS["api.js — Axios<br/>(token Bearer)"]
-        PAGES --> STATE --> AXIOS
+        PUB["Pages publiques<br/>Accueil · Connexion · Boutiques · Inscription client"]
+        STAFF["Espace staff (Layout)<br/>Tableau de bord · Matériels · Locations<br/>Achats · Ventes · Dépenses · Rapports · Paramètres"]
+        CLIENT["Espace client (ClientLayout)<br/>Catalogue + Panier · Mes locations"]
+        CORE["AuthContext · react-i18next · api.js (Axios + jeton Bearer)"]
+        PUB --> CORE
+        STAFF --> CORE
+        CLIENT --> CORE
     end
 
-    subgraph LARAVEL["Laravel — API REST (Backend)"]
+    %% ===== CONTROLLER (Laravel API) =====
+    subgraph CONTROLLER["CONTROLLER — Laravel 13 · API REST"]
         direction TB
         ROUTES["routes/api.php"]
-        MW["Middleware<br/>auth:sanctum + TenantScoped"]
-        CTRL["Controllers<br/>(CONTROLLER)"]
-        REQ["Validation<br/>(Form Requests)"]
-        MODELS["Models Eloquent<br/>(MODEL)"]
-        BLADE["invoice.blade.php<br/>(VIEW — PDF)"]
-        ROUTES --> MW --> CTRL
-        CTRL --> REQ
-        CTRL --> MODELS
-        CTRL --> BLADE
+        MW["Middleware : auth:sanctum<br/>trait TenantScoped (isolation par boutique)"]
+        AUTH["AuthController<br/>(connexion · inscription-client · profil)"]
+        REF["Référentiels & Catalogue<br/>Materiel · Categorie · Marque · Unite<br/>Devise · Taxe · TypePaiement · Fournisseur"]
+        OPS["Opérations<br/>Location · Paiement · Achat · Vente<br/>Depense · Ajustement"]
+        SHOP["BoutiqueController<br/>vitrine publique + /catalogue (place de marché)"]
+        REPORT["RapportController · TableauBordController"]
+        PDFC["FactureController (facture · reçu)"]
+        ROUTES --> MW
+        MW --> AUTH & REF & OPS & SHOP & REPORT & PDFC
     end
 
-    DB[("MySQL / MariaDB")]
-    PDF["Facture PDF<br/>(dompdf)"]
+    %% ===== MODEL (Eloquent + services) =====
+    subgraph MODEL["MODEL — Eloquent ORM + Services"]
+        direction TB
+        USER["Utilisateur<br/>(admin · gérant · employé · client)"]
+        CATM["Materiel · Categorie · Marque · Unite<br/>Devise · Taxe · TypePaiement · Fournisseur"]
+        TXM["Location / LigneLocation / Paiement<br/>Achat / LigneAchat / PaiementAchat<br/>Vente / LigneVente / PaiementVente<br/>Depense · AjustementStock · Contrat"]
+        SVC["Services : TenantProvisioner · CatalogImporter<br/>Commandes : demo:makita · demo:transpalette"]
+    end
 
-    AXIOS -->|"HTTP · JSON · Bearer"| ROUTES
-    CTRL -->|"JSON (réponse)"| AXIOS
-    MODELS <-->|"SQL (Eloquent ORM)"| DB
-    BLADE --> PDF
-    PDF -->|"téléchargement"| AXIOS
+    %% ===== VIEW — gabarits PDF =====
+    BLADE["VIEW (PDF) — Blade<br/>facture.blade.php · recu-vente.blade.php"]
+
+    DB[("MySQL / MariaDB")]
+    IMG[("Stockage images<br/>storage/app/public")]
+    OUT["PDF (barryvdh/dompdf)"]
+
+    %% ===== Flux =====
+    CORE -->|"HTTPS · JSON · Bearer"| ROUTES
+    CONTROLLER -->|"JSON (réponse)"| CORE
+    AUTH & REF & OPS & SHOP & REPORT --> MODEL
+    PDFC --> BLADE --> OUT -->|"téléchargement"| CORE
+    MODEL <-->|"SQL (Eloquent)"| DB
+    CATM --> IMG
 
     classDef view fill:#e3f0ff,stroke:#0071e3,color:#0a2540;
     classDef ctrl fill:#fff4e3,stroke:#ff9500,color:#5c3b00;
     classDef model fill:#e8fae8,stroke:#34c759,color:#0b3d1a;
-    classDef db fill:#f0f0f3,stroke:#6e6e73,color:#1d1d1f;
-    class PAGES,STATE,AXIOS,BLADE view;
-    class ROUTES,MW,CTRL,REQ ctrl;
-    class MODELS model;
-    class DB,PDF db;
+    classDef infra fill:#f0f0f3,stroke:#6e6e73,color:#1d1d1f;
+    class PUB,STAFF,CLIENT,CORE,BLADE view;
+    class ROUTES,MW,AUTH,REF,OPS,SHOP,REPORT,PDFC ctrl;
+    class USER,CATM,TXM,SVC model;
+    class DB,IMG,OUT infra;
