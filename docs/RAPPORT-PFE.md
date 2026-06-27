@@ -28,6 +28,16 @@ css: |
   .cover .yr { margin-top: 36px; font-size: 14px; font-weight: bold; }
   .quote-ded { font-style: italic; text-align: center; line-height: 2; font-size: 14px; }
   .view { background: #f7faff; border: 1px solid #e1ecfb; border-radius: 8px; padding: 8px 12px; margin: 8px 0; }
+  /* Eviter les coupures de figures et de tableaux entre les pages */
+  figure.fig { break-inside: avoid; page-break-inside: avoid; margin: 14px 0; text-align: center; }
+  figure.fig img { margin: 0 auto; max-height: 225mm; width: auto; }
+  figure.fig .cap { margin-top: 4px; }
+  img { break-inside: avoid; page-break-inside: avoid; max-height: 225mm; }
+  .cap { break-before: avoid; page-break-before: avoid; }
+  table { page-break-inside: auto; }
+  tr, th, td { break-inside: avoid; page-break-inside: avoid; }
+  thead { display: table-header-group; }
+  h2, h3, h4 { break-after: avoid; page-break-after: avoid; }
 ---
 
 <div class="cover">
@@ -369,11 +379,15 @@ priorisées et réparties sur les sprints.
 | US-13 | En tant que **client**, je veux ajouter plusieurs articles d'une même boutique à un panier afin de commander en une seule location. | Haute | Sprint 5 |
 | US-14 | En tant qu'**utilisateur**, je veux une interface bilingue (FR/AR) et responsive afin d'utiliser l'application confortablement. | Moyenne | Sprint 6 |
 
-Le **diagramme de Gantt** ci-dessous représente l'ordonnancement de ces sprints dans le
-temps, depuis le cadrage et l'analyse jusqu'aux tests et à la finalisation.
+Le projet a été mené **sur une durée d'environ trois mois** (de mars à mai 2026),
+organisée en six sprints précédés d'une phase de cadrage et d'analyse, et suivis d'une
+phase de tests, de déploiement et de rédaction. Le **diagramme de Gantt** ci-dessous
+représente l'ordonnancement de ces étapes dans le temps.
 
-![Diagramme de Gantt](images/gantt.png)
+<figure class="fig">
+<img src="images/gantt.png" alt="Diagramme de Gantt" />
 <p class="cap">Figure 1 — Diagramme de Gantt — planification des sprints</p>
+</figure>
 
 ### Conclusion du chapitre
 
@@ -493,8 +507,10 @@ Le système distingue quatre acteurs, dont les droits sont résumés ci-dessous.
 Le diagramme suivant synthétise les interactions entre les acteurs et les
 fonctionnalités du système.
 
-![Cas d'utilisation](images/use-cases.png)
+<figure class="fig">
+<img src="images/use-cases.png" alt="Cas d'utilisation" />
 <p class="cap">Figure 2 — Diagramme de cas d'utilisation</p>
+</figure>
 
 Pour préciser le fonctionnement attendu, deux cas d'utilisation majeurs sont décrits
 textuellement ci-dessous.
@@ -543,8 +559,10 @@ textuellement ci-dessous.
 Le diagramme de séquence ci-dessous illustre le flux complet de **création d'une
 location** depuis le panier client.
 
-![Séquence — création d'une location](images/sequence-location.png)
+<figure class="fig">
+<img src="images/sequence-location.png" alt="Séquence — création d'une location" />
 <p class="cap">Figure 3 — Diagramme de séquence — création d'une location</p>
+</figure>
 
 Le flux se déroule ainsi : depuis le panier React, le client confirme la location ; la
 requête `POST /locations` (avec jeton Bearer) traverse les routes puis le middleware
@@ -559,8 +577,10 @@ location et de ses montants, et l'interface affiche une confirmation à l'utilis
 Le diagramme de classes ci-dessous modélise les entités métier (modèles Eloquent) et
 leurs associations.
 
-![Diagramme de classes UML](images/uml-class.png)
+<figure class="fig">
+<img src="images/uml-class.png" alt="Diagramme de classes UML" />
 <p class="cap">Figure 4 — Diagramme de classes (UML)</p>
+</figure>
 
 Les principales associations sont les suivantes : un **Utilisateur** (qui représente aussi
 une boutique pour les gérants) possède ses **Matériels** et est rattaché à des référentiels
@@ -576,8 +596,10 @@ sont dérivés des paiements de chaque opération.
 
 Le modèle physique de données adopte une **nomenclature 100 % française**.
 
-![Modèle physique de données](images/database-schema.png)
+<figure class="fig">
+<img src="images/database-schema.png" alt="Modèle physique de données" />
 <p class="cap">Figure 5 — Modèle physique de données</p>
+</figure>
 
 Les tables métier sont : `utilisateurs`, `materiels`, `locations`, `lignes_location`,
 `paiements`, `achats`, `lignes_achat`, `paiements_achat`, `ventes`, `lignes_vente`,
@@ -635,8 +657,10 @@ L'application suit une architecture **découplée** : une **SPA React** dialogue
 côté serveur, les contrôleurs orchestrent la logique, l'ORM **Eloquent** accède à la base
 **MySQL**, et des gabarits Blade génèrent les documents PDF.
 
-![Architecture MVC](images/architecture-mvc.png)
+<figure class="fig">
+<img src="images/architecture-mvc.png" alt="Architecture MVC" />
 <p class="cap">Figure 6 — Architecture technique (MVC) de l'application</p>
+</figure>
 
 Le frontend joue le rôle de **Vue** principale ; il consomme le **Contrôleur** (API REST)
 qui pilote le **Modèle** (Eloquent). Chaque requête métier traverse le middleware
@@ -723,20 +747,26 @@ et « Mes locations »).
 L'espace public accueille les visiteurs, présente les boutiques et permet la connexion et
 l'inscription des clients.
 
-![Page d'accueil](images/screens/01-accueil.png)
+<figure class="fig">
+<img src="images/screens/01-accueil.png" alt="Page d'accueil" />
 <p class="cap">Figure 7 — Page d'accueil (espace public)</p>
+</figure>
 
 La **page d'accueil** présente l'application et oriente le visiteur vers la connexion, la
 vitrine des boutiques ou l'inscription, avec un sélecteur de langue (FR/AR).
 
-![Page de connexion](images/screens/02-connexion.png)
+<figure class="fig">
+<img src="images/screens/02-connexion.png" alt="Page de connexion" />
 <p class="cap">Figure 8 — Page de connexion</p>
+</figure>
 
 La **page de connexion** authentifie l'utilisateur : à la saisie de l'e-mail et du mot de
 passe, l'application reçoit un jeton et redirige vers l'espace correspondant au rôle.
 
-![Boutiques publiques](images/screens/03-boutiques.png)
+<figure class="fig">
+<img src="images/screens/03-boutiques.png" alt="Boutiques publiques" />
 <p class="cap">Figure 9 — Vitrine des boutiques publiques</p>
+</figure>
 
 La **vitrine des boutiques** liste les boutiques disponibles et permet d'accéder à leur
 catalogue avant même de s'inscrire.
@@ -745,45 +775,59 @@ catalogue avant même de s'inscrire.
 
 L'espace staff regroupe les écrans de gestion quotidienne de la boutique.
 
-![Tableau de bord](images/screens/04-tableau-bord.png)
+<figure class="fig">
+<img src="images/screens/04-tableau-bord.png" alt="Tableau de bord" />
 <p class="cap">Figure 10 — Tableau de bord (espace staff)</p>
+</figure>
 
 Le **tableau de bord** affiche les indicateurs clés (revenus, locations, stock) et un
 suivi visuel des locations par statut, point d'entrée de la gestion.
 
-![Catalogue du matériel](images/screens/05-materiels.png)
+<figure class="fig">
+<img src="images/screens/05-materiels.png" alt="Catalogue du matériel" />
 <p class="cap">Figure 11 — Catalogue du matériel</p>
+</figure>
 
 L'écran **Matériel** permet la gestion complète du catalogue (CRUD, images, catégories,
 marques, unités) ainsi que la consultation de la disponibilité.
 
-![Gestion des locations](images/screens/06-locations.png)
+<figure class="fig">
+<img src="images/screens/06-locations.png" alt="Gestion des locations" />
 <p class="cap">Figure 12 — Gestion des locations</p>
+</figure>
 
 L'écran **Locations** orchestre la réservation multi-articles, le contrôle de
 disponibilité, le calcul de la TVA, le suivi des paiements partiels et la génération de la
 facture PDF.
 
-![Gestion des achats](images/screens/07-achats.png)
+<figure class="fig">
+<img src="images/screens/07-achats.png" alt="Gestion des achats" />
 <p class="cap">Figure 13 — Gestion des achats</p>
+</figure>
 
 L'écran **Achats** gère les commandes auprès des fournisseurs : à la réception, le stock
 est alimenté et les encaissements partiels sont suivis.
 
-![Gestion des ventes](images/screens/08-ventes.png)
+<figure class="fig">
+<img src="images/screens/08-ventes.png" alt="Gestion des ventes" />
 <p class="cap">Figure 14 — Gestion des ventes</p>
+</figure>
 
 L'écran **Ventes** enregistre les ventes de matériel avec décrément du stock, suivi des
 encaissements et génération d'un reçu PDF.
 
-![Rapports et statistiques](images/screens/09-rapports.png)
+<figure class="fig">
+<img src="images/screens/09-rapports.png" alt="Rapports et statistiques" />
 <p class="cap">Figure 15 — Rapports et statistiques</p>
+</figure>
 
 L'écran **Rapports** restitue, sur une période choisie, le bénéfice (revenus − coûts), le
 chiffre d'affaires, l'encaissé / le reste à encaisser et la répartition des locations.
 
-![Paramètres](images/screens/10-parametres.png)
+<figure class="fig">
+<img src="images/screens/10-parametres.png" alt="Paramètres" />
 <p class="cap">Figure 16 — Paramètres et référentiels</p>
+</figure>
 
 L'écran **Paramètres** centralise la gestion des référentiels (TVA, devises, unités,
 catégories, marques, types de paiement) par onglets.
@@ -792,15 +836,19 @@ catégories, marques, types de paiement) par onglets.
 
 L'espace client expose la place de marché et le suivi des locations du client.
 
-![Place de marché client (panier)](images/screens/11-magasin.png)
+<figure class="fig">
+<img src="images/screens/11-magasin.png" alt="Place de marché client (panier)" />
 <p class="cap">Figure 17 — Place de marché client (panier)</p>
+</figure>
 
 La **place de marché** propose un catalogue multi-boutiques avec recherche et filtre par
 boutique ; le client ajoute plusieurs articles d'une même boutique à son **panier** avant
 de confirmer sa location sur une période commune.
 
-![Mes locations (client)](images/screens/12-mes-locations.png)
+<figure class="fig">
+<img src="images/screens/12-mes-locations.png" alt="Mes locations (client)" />
 <p class="cap">Figure 18 — Mes locations (espace client)</p>
+</figure>
 
 L'écran **Mes locations** permet au client de suivre l'état de ses demandes et locations,
 toutes boutiques confondues.
