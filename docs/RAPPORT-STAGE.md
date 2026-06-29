@@ -55,7 +55,7 @@ css: |
 <p class="infos">
 <strong>Réalisé par&nbsp;:</strong> &nbsp;Youssef EL WAFI<br/>
 <strong>Entreprise d'accueil&nbsp;:</strong> &nbsp;MSINVEST<br/>
-<strong>Période du stage&nbsp;:</strong> &nbsp;Janvier 2026 – Avril 2026<br/>
+<strong>Période du stage&nbsp;:</strong> &nbsp;Du 1er mars au 1er avril 2026<br/>
 <strong>Encadrant entreprise&nbsp;:</strong> &nbsp;M. Larbi ELHABTI<br/>
 <strong>Encadrant pédagogique&nbsp;:</strong> &nbsp;…………………………………<br/>
 <strong>Établissement&nbsp;:</strong> &nbsp;OFPPT – ISTA, Casablanca
@@ -104,7 +104,7 @@ nécessaires.
 
 ## Résumé
 
-Ce rapport présente le travail réalisé durant un stage de **quatre mois** au sein de **MSINVEST**,
+Ce rapport présente le travail réalisé durant un stage d'**un mois** au sein de **MSINVEST**,
 consacré à la **conception et au développement d'un tableau de bord analytique des indicateurs de
 performance (KPI) des collaborateurs**.
 
@@ -121,7 +121,7 @@ analyse de productivité, TCPDF.
 
 ### Abstract
 
-This report presents the work carried out during a **four-month internship** at **MSINVEST**,
+This report presents the work carried out during a **one-month internship** at **MSINVEST**,
 dedicated to the **design and development of an analytical dashboard for employees' key
 performance indicators (KPI)**. The module centralizes operational and HR data (attendance,
 productivity, workload, processed cases) within a single interface accessible to management and the
@@ -151,7 +151,7 @@ analysis, TCPDF.
 | N° | Figure |
 | -- | ------ |
 | Figure 1 | Diagramme de cas d'utilisation du module KPI |
-| Figure 2 | Diagramme de Gantt — planification du stage (4 mois) |
+| Figure 2 | Diagramme de Gantt — planification du stage (1 mois) |
 | Figure 3 | Architecture technique du module (MVC / HMVC) |
 
 ### Liste des abréviations
@@ -192,7 +192,7 @@ C'est dans ce contexte que **MSINVEST** a souhaité se doter d'un **tableau de b
 unique**, accessible aux décideurs, capable d'afficher en temps réel les indicateurs clés de chaque
 collaborateur — présence, retards, charge de travail, dossiers traités, heures supplémentaires.
 
-Le stage, d'une durée de **quatre mois**, avait pour mission la conception, le développement et la
+Le stage, d'une durée d'**un mois**, avait pour mission la conception, le développement et la
 mise en production de ce module d'analyse, intégré à la plateforme interne de l'entreprise.
 
 Ce rapport retrace la démarche suivie tout au long du projet. Le **chapitre 1** présente l'organisme
@@ -292,13 +292,13 @@ La méthodologie suivie est **itérative et incrémentale**. Chaque indicateur a
 le cycle : étude du besoin, prototypage rapide, démonstration, recueil du retour, ajustement, mise
 en production, suivi. Cette approche a permis de livrer de la valeur dès les premières semaines.
 
-Le projet a été conduit **sur une durée de quatre mois** (de janvier à avril 2026). Le diagramme de
+Le projet a été conduit **sur une durée d'un mois** (du 1er mars au 1er avril 2026). Le diagramme de
 Gantt ci-dessous en présente l'ordonnancement, du cadrage jusqu'à la mise en production et à la
 rédaction du rapport.
 
 <figure class="fig">
 <img src="images/stage-gantt.png" alt="Diagramme de Gantt" />
-<p class="cap">Figure 2 — Diagramme de Gantt — planification du stage (4 mois)</p>
+<p class="cap">Figure 2 — Diagramme de Gantt — planification du stage (1 mois)</p>
 </figure>
 
 <div class="page-break"></div>
@@ -458,7 +458,7 @@ allégée. Toutes les actions sont **journalisées** (qui a consulté quel rappo
 
 ## Conclusion générale et perspectives
 
-Ce stage de quatre mois au sein de **MSINVEST** a été l'occasion de conduire un projet logiciel **de
+Ce stage d'un mois au sein de **MSINVEST** a été l'occasion de conduire un projet logiciel **de
 bout en bout** : analyse du besoin, conception technique, implémentation, intégration, tests
 utilisateurs et mise en production.
 
